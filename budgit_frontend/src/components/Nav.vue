@@ -15,12 +15,14 @@ export default {
 
 <style scoped>
     #nav {
-        padding: 30px;
+        width: 100%;
+        background-color: #24292E;
+        padding: 1em;
     }
 
     #nav a {
         font-weight: bold;
-        color: #2c3e50;
+        color: #BABCB7;
     }
 
     #nav a.router-link-exact-active {

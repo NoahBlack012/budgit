@@ -1,5 +1,5 @@
 <template>
-    <div class="budgetitem" v-bind:class="{'income': item.income}">
+    <div class="budgetitem">
         <p>
             {{item.title}}
             ${{item.value}}
