@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <Nav />
-    <img alt="Vue logo" src="../assets/logo.png">
     <h1>Home</h1>
   </div>
 </template>
@@ -15,6 +14,6 @@ export default {
   name: 'Home',
   components: {
     Nav,
-  }
+  },
 }
 </script>

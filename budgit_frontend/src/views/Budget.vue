@@ -14,6 +14,7 @@ import Nav from "../components/Nav"
 import BudgetItems from "../components/BudgetItems"
 import AddItem from "../components/AddItem"
 import ExpenseTotal from "../components/ExpenseTotal"
+import { mapGetters } from "vuex";
 export default {
   name: 'Budget',
   components: {
@@ -25,14 +26,6 @@ export default {
   data(){
     return{
       // Make api call and get user's budget
-      items: [
-        {
-          id: 1,
-          income: false,
-          title: "Item 1",
-          value: 200
-        },
-      ],
       total: 0
     }
   },
@@ -57,7 +50,8 @@ export default {
   },
   beforeMount(){
     this.getTotal();
-  }
+  },
+  computed: mapGetters(['items'])
 }
 </script>
 

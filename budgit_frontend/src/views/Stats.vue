@@ -1,14 +1,18 @@
 <template>
     <div class="stats">
         <Nav />
-        <h1>Stats</h1>
-        <pie-chart :chartlabel="label" :datapoints="datapoints" id="chart" />
+        <h1>Statistics</h1>
+        <div class="graphs">
+            <pie-chart :chartlabel="totals_label" :datapoints="totals_datapoints" :labels="totals_category_labels" id="expense_category" />
+            <pie-chart :chartlabel="totals_label" :datapoints="totals_datapoints" :labels="totals_category_labels" id="expense_category2" />
+            <pie-chart :chartlabel="totals_label" :datapoints="totals_datapoints" :labels="totals_category_labels" id="expense_category3" />
+        </div>
     </div>
 </template>
 
 <script>
 import Nav from "../components/Nav"
-import PieChart from "../components/PieChart"
+import PieChart from "../components/charts/PieChart"
 export default {
     name: "Stats",
     components: {
@@ -17,15 +21,27 @@ export default {
     }, 
     data(){
         return{
-            label: "Chart",
-            datapoints: [20, 30, 40, 10]
+            totals_label: "Chart",
+            totals_datapoints: [20, 30, 40, 10], //Api call to get users values
+            totals_category_labels: ["A", "B", "C", "D"], //Api call to get users categoies
         }
     }
 }
 </script>
 
 <style scoped>
-    #chart{
-        float: left;
+    .graphs{
+        display: grid;
+        grid-template-columns: 33% 33% 33%;
+    }
+
+    #expense_category{
+        grid-column: 1;
+    }
+    #expense_category2{
+        grid-column: 2;
+    }
+    #expense_category3{
+        grid-column: 3;
     }
 </style>

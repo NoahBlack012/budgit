@@ -9,14 +9,18 @@ export default {
         },
         datapoints: {
             type: Array
+        },
+        labels: {
+            type: Array
         }
     },
     data() {
         return {
             chartData: {
-                labels: ["A", "B", "C", "D"],
+                type: 'pie',
+                labels: this.labels,
                 datasets: [{
-                    label: this.chartLabel,
+                    label: this.chartlabel,
                     borderWidth: 1,
                     borderColor: [
                         'rgba(255,99,132,1)',

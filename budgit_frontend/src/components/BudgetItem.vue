@@ -3,6 +3,7 @@
         <p>
             {{item.title}}
             ${{item.value}}
+            {{item.category}}
             <button @click="$emit('del-item', item.id)" class = "delete">X</button>
         </p>
     </div>
