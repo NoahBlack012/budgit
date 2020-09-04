@@ -14,7 +14,7 @@ import Nav from "../components/Nav"
 import BudgetItems from "../components/BudgetItems"
 import AddItem from "../components/AddItem"
 import ExpenseTotal from "../components/ExpenseTotal"
-import { mapGetters } from "vuex";
+//import axios from "axios"
 export default {
   name: 'Budget',
   components: {
@@ -26,6 +26,7 @@ export default {
   data(){
     return{
       // Make api call and get user's budget
+      items: [],
       total: 0
     }
   },
@@ -51,7 +52,17 @@ export default {
   beforeMount(){
     this.getTotal();
   },
-  computed: mapGetters(['items'])
+  // created(){
+  //   axios.post("http://127.0.0.1:5000/api/get_items", {
+  //     headers:{
+  //       "Access-Control-Allow-Origin": "http://127.0.0.1:5000/"
+  //     },
+  //     "userid": 1, 
+  //     "api_key": process.env.API_KEY}
+  //   )
+  //   .then(res => this.items = res.items)
+  //   .catch(err => console.error(err))
+  // }
 }
 </script>
 

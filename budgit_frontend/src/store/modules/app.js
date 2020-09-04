@@ -1,15 +1,10 @@
 //import axios from 'axios';
 
 const state = {
-    items: {
-        id: 1,
-        title: "Item 1",
-        value: 200,
-        category: "food"
-    },
+    userid: 1,
 }
 const getters = {
-    items: (state) => state.budget_items
+    userid: (state) => state.userid 
 }
 const actions = {}
 const mutations = {}
