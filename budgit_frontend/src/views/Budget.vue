@@ -14,7 +14,7 @@ import Nav from "../components/Nav"
 import BudgetItems from "../components/BudgetItems"
 import AddItem from "../components/AddItem"
 import ExpenseTotal from "../components/ExpenseTotal"
-//import axios from "axios"
+import axios from "axios"
 export default {
   name: 'Budget',
   components: {
@@ -52,17 +52,27 @@ export default {
   beforeMount(){
     this.getTotal();
   },
-  // created(){
-  //   axios.post("http://127.0.0.1:5000/api/get_items", {
-  //     headers:{
-  //       "Access-Control-Allow-Origin": "http://127.0.0.1:5000/"
-  //     },
-  //     "userid": 1, 
-  //     "api_key": process.env.API_KEY}
-  //   )
-  //   .then(res => this.items = res.items)
-  //   .catch(err => console.error(err))
-  // }
+  created(){
+    console.log(process.env.VUE_APP_API_KEY);
+    // fetch(`${process.env.VUE_APP_BASE}/get_items`, {
+    //   method: 'POST',
+    //   content: 'application/json',
+    //   body: JSON.stringify({
+    //     "userid": 1, 
+    //     "api_key": process.env.VUE_APP_API_KEY
+    //     }),
+    //   }
+    // )
+    axios.post(`${process.env.VUE_APP_BASE}/get_items`, {
+      "userid": 1, 
+      "api_key": process.env.VUE_APP_API_KEY
+    })
+    .then((res) => {
+      console.log(res.data);
+      this.items = res.data.items;
+      })
+    .catch(err => console.error(err))
+  }
 }
 </script>
 

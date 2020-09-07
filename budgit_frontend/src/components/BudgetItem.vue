@@ -3,7 +3,7 @@
         <p>
             {{item.title}}
             ${{item.value}}
-            {{item.category}}
+            <span id = "cat">{{item.category}}</span>
             <button @click="$emit('del-item', item.id)" class = "delete">X</button>
         </p>
     </div>
@@ -20,7 +20,7 @@ export default {
 
 <style scoped>
     .budgetitem{
-        color: red;
+        color: black;
     }
     .income{
         color: green;
@@ -32,5 +32,8 @@ export default {
         padding: 5px 9px;
         border-radius: 50%;
         cursor: pointer;
+    }
+    #cat{
+        color: blue;
     }
 </style>
