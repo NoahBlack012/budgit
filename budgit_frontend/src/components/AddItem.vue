@@ -19,7 +19,8 @@
 
 <script>
 import { required, numeric } from 'vuelidate/lib/validators'
-import { v4 as uuidv4 } from 'uuid'
+// import { v4 as uuidv4 } from 'uuid'
+import axios from "axios"
 export default {
     name: "AddItem", 
     data(){
@@ -54,17 +55,24 @@ export default {
             }else{
                 item_category = this.category
             }
-            const newitem = {
-                id: uuidv4(),
+            const new_item = {
                 title: this.title,
                 value: this.value,
                 category: item_category,
             }
+            axios.post(`${process.env.VUE_APP_BASE}/add_item`, {
+                    "userid": process.env.USERID, //Replace with state var
+                    "api_key": process.env.VUE_APP_API_KEY,
+                    "new_item": new_item
+                }
+            )
+            .then(res => new_item.id = res.id)
+            .catch(err => console.error(err))
             this.title = ''; 
             this.value = '';
             this.category = '';
             this.formsubmited = false;
-            this.$emit('add-item', newitem);
+            this.$emit('add-item', new_item);
         }
     }
 }

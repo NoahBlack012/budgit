@@ -39,6 +39,13 @@ export default {
     deleteitem(id){
       // Make api call to delete item from db
       this.items = this.items.filter(item => item.id !== id); //Remove deleted item from list
+      axios.post(`${process.env.VUE_APP_BASE}/delete_item`, {
+        "userid": process.env.VUE_APP_USERID, // Replace with state var
+        "api_key": process.env.VUE_APP_API_KEY,
+        "deleted_id": id
+      })
+      .then()
+      .catch(err => console.error(err))
       this.getTotal();
     }, 
     getTotal(){

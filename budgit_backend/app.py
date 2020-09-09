@@ -118,5 +118,18 @@ def add_item():
     db.session.commit()
     return make_response(jsonify({"status_code": 200, "id": new_item_object.id}), 200)
 
+@app.route("/api/delete_item", methods=["POST"])
+def delete_item():
+    userid = request.json.get("userid", None)
+    sent_key = request.json.get("api_key", None)
+    deleted_id = request.json.get("deleted_id", None)
+    if not check_api_key(sent_key):
+        return make_response(jsonify({"status_code": 401}), 401)
+
+    Item.query.filter_by(id=deleted_id).delete() #delete the item with the id provided from the db
+    db.session.commit()
+    Item.query.filter_by(userid=userid)
+    return make_response(jsonify({"status_code": 200}), 200)
+
 if __name__ == '__name__':
     app.run(debug=True)
