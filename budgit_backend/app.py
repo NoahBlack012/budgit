@@ -26,9 +26,10 @@ class User(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
+    categories = db.Column(db.ARRAY(db.String), nullable=False, default=["food", "transportation", "shopping", "rent"])
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.password}', '{self.id}')"
+        return f"User('{self.username}', '{self.password}', '{self.id}', '{self.categories}')"
 
 class Item(db.Model):
     __tablename__ = "items"
@@ -128,8 +129,31 @@ def delete_item():
 
     Item.query.filter_by(id=deleted_id).delete() #delete the item with the id provided from the db
     db.session.commit()
-    Item.query.filter_by(userid=userid)
     return make_response(jsonify({"status_code": 200}), 200)
+
+@app.route("/api/add_category", methods=["POST"])
+def add_category():
+    userid = request.json.get("userid", None)
+    sent_key = request.json.get("api_key", None)
+    new_category = request.json.get("new_category", None)
+    if not check_api_key(sent_key):
+        return make_response(jsonify({"status_code": 401}), 401)
+    categories = User.query.filter_by(id=userid).first().categories
+    categories.append(new_category)
+    User.query.filter_by(id=userid).first().categories = categories
+    db.session.commit()
+    user_categories = User.query.filter_by(id=userid).first().categories
+    print (user_categories)
+    return make_response(jsonify({"status_code": 200, "categories": user_categories}), 200)
+
+@app.route("/api/get_categories", methods=["POST"])
+def get_categories():
+    userid = request.json.get("userid", None)
+    sent_key = request.json.get("api_key", None)
+    if not check_api_key(sent_key):
+        return make_response(jsonify({"status_code": 401}), 401)
+    user_categories = User.query.filter_by(id=userid).first().categories
+    return make_response(jsonify({"status_code": 200, "categories": user_categories}), 200)
 
 if __name__ == '__name__':
     app.run(debug=True)

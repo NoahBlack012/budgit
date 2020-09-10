@@ -3,11 +3,10 @@
         <input type="text" name="title" v-model="title" placeholder="Item"><br>
         <input type="text" name="value" v-model="value" placeholder="Amount"><br>
         <select name="category" id="category" v-model="category">
-            <option value="food" selected>Food</option>
-            <option value="transportation">Transportation</option>
-            <option value="shopping">Shopping</option>
-            <option value="rent">Rent</option>
-        </select><br>
+            <option  v-bind:key="cat" v-for="cat in categories" :value="cat">{{ cat }}</option>
+        </select>
+        <AddCategory v-on:add-category="new_category" />
+        <br>
         <input type="submit" value="Create Item">
         <div class="errors" v-if="formsubmited">
             <div class="error" v-if="!$v.value.numeric">Amount Must Be a Number</div>
@@ -19,15 +18,20 @@
 
 <script>
 import { required, numeric } from 'vuelidate/lib/validators'
+import AddCategory from "./AddCategory"
 // import { v4 as uuidv4 } from 'uuid'
 import axios from "axios"
 export default {
     name: "AddItem", 
+    components: {
+        AddCategory,
+    },
     data(){
         return{
             title: '',
             value: '',
             formsubmited: false,
+            categories: [],
         }
     },
     validations:{
@@ -40,6 +44,9 @@ export default {
         },
     },
     methods: {
+        new_category(new_categories){
+            this.categories = new_categories
+        },
         formsubmit(){
             this.formsubmited = true;
             this.$v.$touch()
@@ -74,7 +81,20 @@ export default {
             this.formsubmited = false;
             this.$emit('add-item', new_item);
         }
-    }
+    }, 
+    created(){
+        axios.post(`${process.env.VUE_APP_BASE}/get_categories`, {
+            "userid": process.env.VUE_APP_USERID, // Replace with state var
+            "api_key": process.env.VUE_APP_API_KEY
+        })
+        .then(res => {
+            for (let i of res.data.categories){
+                this.categories.push(i)
+            }
+            console.log(this.categories);
+        })
+        .catch(err => console.error(err))
+    },
 }
 </script>
 

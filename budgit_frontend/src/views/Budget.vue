@@ -60,7 +60,6 @@ export default {
     this.getTotal();
   },
   created(){
-    console.log(process.env.VUE_APP_API_KEY);
     // fetch(`${process.env.VUE_APP_BASE}/get_items`, {
     //   method: 'POST',
     //   content: 'application/json',
@@ -71,11 +70,10 @@ export default {
     //   }
     // )
     axios.post(`${process.env.VUE_APP_BASE}/get_items`, {
-      "userid": 1, 
+      "userid": process.env.VUE_APP_USERID, // Replace with state var 
       "api_key": process.env.VUE_APP_API_KEY
     })
     .then((res) => {
-      console.log(res.data);
       this.items = res.data.items;
       })
     .catch(err => console.error(err))
