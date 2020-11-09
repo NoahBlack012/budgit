@@ -55,17 +55,10 @@ export default {
             }
         },
         additem(){
-            let item_category = ''
-            if (this.category === "additem"){
-                this.categoray.appendChild(this.newitem)
-                item_category = this.newitem
-            }else{
-                item_category = this.category
-            }
             const new_item = {
                 title: this.title,
                 value: this.value,
-                category: item_category,
+                category: this.category,
             }
             axios.post(`${process.env.VUE_APP_BASE}/add_item`, {
                     "userid": process.env.USERID, //Replace with state var

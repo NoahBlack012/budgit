@@ -6,10 +6,10 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.dialects.postgresql import UUID
 import os
 import bcrypt
+import json
+import random
 #venv\Scripts\activate
 #$env:FLASK_APP='app.py'
-#$env:API_KEY='x{lhtTaQz58QJ7ZK;a~`/t!:D'
-#env:DATABASE_URI='postgres://hvlgtapyoydbfe:2dd3f2b94636564113e114a2f68862631ea02ac1e835ee4e45f0668230b5f9dc@ec2-184-72-235-159.compute-1.amazonaws.com:5432/d9ca62s6qk8gl8'
 
 app = Flask(__name__)
 CORS(app)
@@ -154,6 +154,39 @@ def get_categories():
         return make_response(jsonify({"status_code": 401}), 401)
     user_categories = User.query.filter_by(id=userid).first().categories
     return make_response(jsonify({"status_code": 200, "categories": user_categories}), 200)
+
+@app.route("/api/get_pie_totals", methods=["POST"])
+def get_pie_totals():
+    userid = request.json.get("userid", None)
+    sent_key = request.json.get("api_key", None)
+    if not check_api_key(sent_key):
+        return make_response(jsonify({"status_code": 401}), 401)
+    user_categories = User.query.filter_by(id=userid).first().categories
+    user_items = Item.query.filter_by(userid=userid).all()
+
+    category_datasets = []
+    category_totals = []
+    backgroundcolors = []
+    for category in user_categories:
+        category_totals.append(0)
+        backgroundcolors.append('{:06x}'.format(random.randint(0, 0xFFFFFF)))
+    for item in user_items:
+        for category in user_categories:
+            if item.category == category:
+                category_totals[user_categories.index(category)] += float(item.value)
+    category_obj = {
+        "labels": [category for category in user_categories],
+        "datasets": {
+            "label": "Total",
+            "data": category_totals,
+            "backgroundColor": [color for color in backgroundcolors]
+        }
+    }
+    category_obj = json.dumps(category_obj)
+    category_datasets.append(category_obj)
+
+    return make_response(jsonify({"status_code": 200, "totals_datasets": category_datasets}), 200)
+
 
 if __name__ == '__name__':
     app.run(debug=True)
