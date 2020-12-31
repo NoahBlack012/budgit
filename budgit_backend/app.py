@@ -8,6 +8,7 @@ import os
 import bcrypt
 import json
 import random
+import datetime
 #venv\Scripts\activate
 #$env:FLASK_APP='app.py'
 
@@ -38,6 +39,7 @@ class Item(db.Model):
     title = db.Column(db.String, nullable=False)
     value = db.Column(db.Numeric, nullable=False)
     category = db.Column(db.String, nullable=False)
+    date = db.Column(db.DateTime, default=f"{datetime.datetime.now().year}-{datetime.datetime.now().month}-{datetime.datetime.now().day}")
 
     def __repr__(self):
         return f"Item('{self.id}', '{self.userid}', '{self.title}', '{self.value}', '{self.category}')"
@@ -47,7 +49,6 @@ def check_api_key(sent_key):
         return True
     else:
         return False
-
 
 @app.route("/api/signup", methods=["POST"])
 def signup():
@@ -71,7 +72,6 @@ def login():
         return jsonify({"status_code": 401})
     username = request.json.get("username", None)
     password = request.json.get("password", None)
-    #hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     db_user = User.query.filter_by(username=username).first()
     db_password = db_user.password
     if bcrypt.checkpw(password.encode('utf-8'), db_password.encode('utf-8')):
@@ -94,7 +94,8 @@ def get_items():
                 "userid": item.userid,
                 "title": item.title,
                 "value": float(item.value),
-                "category": item.category
+                "category": item.category, 
+                "date": str(item.date)
             }
         )
     res = make_response(jsonify({"status_code": 200, "items": json_items}), 200)
@@ -113,7 +114,7 @@ def add_item():
         userid=userid,
         title=new_item["title"],
         value=new_item["value"],
-        category=new_item["category"]
+        category=new_item["category"], 
     )
     db.session.add(new_item_object)
     db.session.commit()
@@ -143,7 +144,6 @@ def add_category():
     User.query.filter_by(id=userid).first().categories = categories
     db.session.commit()
     user_categories = User.query.filter_by(id=userid).first().categories
-    print (user_categories)
     return make_response(jsonify({"status_code": 200, "categories": user_categories}), 200)
 
 @app.route("/api/get_categories", methods=["POST"])
@@ -193,6 +193,42 @@ def get_pie_totals():
 
     return make_response(jsonify({"status_code": 200, "totals_datasets": category_obj}), 200)
 
+@app.route("/api/get_monthly_bar_totals", methods=["POST"])
+def get_monthly_bar_totals():
+    month_conv = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 
+    7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
+    userid = request.json.get("userid", None)
+    sent_key = request.json.get("api_key", None)
+    if not check_api_key(sent_key):
+        return make_response(jsonify({"status_code": 401}), 401)
+    user_items = Item.query.filter_by(userid=userid).all()
 
+    months = []
+    for item in user_items:
+        months.append(item.date.month)
+
+    data = []
+    for month in range(1, 13):
+        items = [item for item in user_items if item.date.month == month and item.date.year == datetime.datetime.now().year]
+        items_sum = 0
+        for item in items:
+            items_sum += int(item.value)
+        data.append(items_sum)
+
+    label_months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    bar_data = {
+        "labels": label_months, 
+        "datasets": [
+            {
+                "label": "Monthy Expendatures",
+                "backgroundColor": 'rgba(92, 207, 92, 1)', 
+                "data": data, 
+            }
+        ]
+    }
+
+    return make_response(jsonify({"status_code": 200, "bar_data": bar_data}), 200)
+
+            
 if __name__ == '__name__':
     app.run(debug=True)
