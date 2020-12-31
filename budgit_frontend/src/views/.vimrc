@@ -1,2 +1,0 @@
-set numbers
-set autoindent

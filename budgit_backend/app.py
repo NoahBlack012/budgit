@@ -169,23 +169,29 @@ def get_pie_totals():
     backgroundcolors = []
     for category in user_categories:
         category_totals.append(0)
-        backgroundcolors.append('{:06x}'.format(random.randint(0, 0xFFFFFF)))
+        r = random.randint(0, 255)
+        g = random.randint(0, 255)
+        b = random.randint(0, 255)
+        backgroundcolors.append(f"rgba({r}, {g}, {b}, 1")
     for item in user_items:
         for category in user_categories:
             if item.category == category:
                 category_totals[user_categories.index(category)] += float(item.value)
+
     category_obj = {
         "labels": [category for category in user_categories],
-        "datasets": {
-            "label": "Total",
-            "data": category_totals,
-            "backgroundColor": [color for color in backgroundcolors]
-        }
+        "datasets": [
+            {
+                "label": "Total",
+                "data": category_totals,
+                "backgroundColor": [color for color in backgroundcolors]
+            }
+        ]
     }
-    category_obj = json.dumps(category_obj)
-    category_datasets.append(category_obj)
+    # category_obj = json.dumps(category_obj)
+    # category_datasets.append(category_obj)
 
-    return make_response(jsonify({"status_code": 200, "totals_datasets": category_datasets}), 200)
+    return make_response(jsonify({"status_code": 200, "totals_datasets": category_obj}), 200)
 
 
 if __name__ == '__name__':

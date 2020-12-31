@@ -61,7 +61,7 @@ export default {
                 category: this.category,
             }
             axios.post(`${process.env.VUE_APP_BASE}/add_item`, {
-                    "userid": process.env.USERID, //Replace with state var
+                    "userid": process.env.VUE_APP_USERID, //Replace with state var
                     "api_key": process.env.VUE_APP_API_KEY,
                     "new_item": new_item
                 }
