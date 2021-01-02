@@ -58,12 +58,13 @@ def signup():
     for user in db_users:
         if user.username == username:
             return jsonify({"user_created": False})
+
     hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
     new_user = User(username=username, password=hashed_password.decode('utf-8'))
     db.session.add(new_user)
     db.session.commit()
-    id = User.query.filter_by(username=username).first().id
-    return jsonify({"user_created": True, "id": id})
+    userid = new_user.id #User.query.filter_by(username=username).first().id
+    return jsonify({"user_created": True, "userid": userid})
 
 @app.route("/api/login", methods=["POST"])
 def login():
