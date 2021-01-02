@@ -7,6 +7,8 @@
 <script>
 import BarChart from "./charts/BarChart";
 import axios from "axios";
+import { mapGetters } from "vuex"
+
 export default {
     name: "MonthlyExpenses", 
     components: {
@@ -19,12 +21,12 @@ export default {
             options: null,
         }
     }, 
-
+    computed: mapGetters(['userid']),
     async mounted() {
         this.loaded = false
         try{
             const res = await axios.post(`${process.env.VUE_APP_BASE}/get_monthly_bar_totals`, {
-                    userid: process.env.VUE_APP_USERID, // Replace with state var
+                    userid: this.userid,
                     api_key: process.env.VUE_APP_API_KEY,
                 }
             )

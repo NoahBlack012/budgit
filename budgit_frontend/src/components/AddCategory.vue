@@ -13,6 +13,8 @@
 <script>
 import axios from "axios"
 import { required } from "vuelidate/lib/validators"
+import { mapGetters } from 'vuex'
+
 export default {
     name: "AddCategory", 
     data(){
@@ -25,6 +27,8 @@ export default {
             required
         }
     },
+    computed: mapGetters(['userid']),
+
     methods: {
         add_category(){
             this.$v.$touch()
@@ -33,7 +37,7 @@ export default {
                 axios.post(`${process.env.VUE_APP_BASE}/add_category`, {
                     "new_category": this.new_category, 
                     "api_key": process.env.VUE_APP_API_KEY,
-                    "userid": process.env.VUE_APP_USERID // Replace with state var
+                    "userid": this.userid 
                 })
                 .then(res => {
                     let new_categories = res.data.categories

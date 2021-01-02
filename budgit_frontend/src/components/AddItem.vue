@@ -19,8 +19,9 @@
 <script>
 import { required, numeric } from 'vuelidate/lib/validators'
 import AddCategory from "./AddCategory"
-// import { v4 as uuidv4 } from 'uuid'
 import axios from "axios"
+import { mapGetters } from "vuex"
+
 export default {
     name: "AddItem", 
     components: {
@@ -43,6 +44,8 @@ export default {
             numeric
         },
     },
+
+    computed: mapGetters(['userid']), 
     methods: {
         new_category(new_categories){
             this.categories = new_categories
@@ -61,7 +64,7 @@ export default {
                 category: this.category,
             }
             axios.post(`${process.env.VUE_APP_BASE}/add_item`, {
-                    "userid": process.env.VUE_APP_USERID, //Replace with state var
+                    "userid": this.userid, 
                     "api_key": process.env.VUE_APP_API_KEY,
                     "new_item": new_item
                 }
@@ -77,14 +80,13 @@ export default {
     }, 
     created(){
         axios.post(`${process.env.VUE_APP_BASE}/get_categories`, {
-            "userid": process.env.VUE_APP_USERID, // Replace with state var
+            "userid": this.userid,
             "api_key": process.env.VUE_APP_API_KEY
         })
         .then(res => {
             for (let i of res.data.categories){
                 this.categories.push(i)
             }
-            console.log(this.categories);
         })
         .catch(err => console.error(err))
     },

@@ -27,7 +27,7 @@ class User(db.Model):
     id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     username = db.Column(db.String, unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
-    categories = db.Column(db.ARRAY(db.String), nullable=False, default=["food", "transportation", "shopping", "rent"])
+    categories = db.Column(db.ARRAY(db.String), nullable=False, default=["Food", "Transportation", "Shopping", "Rent"])
 
     def __repr__(self):
         return f"User('{self.username}', '{self.password}', '{self.id}', '{self.categories}')"
@@ -73,6 +73,11 @@ def login():
     username = request.json.get("username", None)
     password = request.json.get("password", None)
     db_user = User.query.filter_by(username=username).first()
+
+    #If the username is not in the db
+    if not db_user:
+        return jsonify({"status_code": 200, "login": False})
+        
     db_password = db_user.password
     if bcrypt.checkpw(password.encode('utf-8'), db_password.encode('utf-8')):
         return jsonify({"status_code": 200, "userid": db_user.id, "login": True})
@@ -188,15 +193,11 @@ def get_pie_totals():
             }
         ]
     }
-    # category_obj = json.dumps(category_obj)
-    # category_datasets.append(category_obj)
 
     return make_response(jsonify({"status_code": 200, "totals_datasets": category_obj}), 200)
 
 @app.route("/api/get_monthly_bar_totals", methods=["POST"])
 def get_monthly_bar_totals():
-    month_conv = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 
-    7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
     userid = request.json.get("userid", None)
     sent_key = request.json.get("api_key", None)
     if not check_api_key(sent_key):

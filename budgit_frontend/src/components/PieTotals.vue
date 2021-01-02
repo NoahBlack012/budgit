@@ -7,11 +7,14 @@
 <script>
 import PieChart from "./charts/PieChart";
 import axios from "axios";
+import { mapGetters } from 'vuex'; 
+
 export default {
     name: "PieTotals", 
     components: {
         PieChart
     },
+    computed: mapGetters(['userid']),
     data: () => {
         return {
         loaded: false, 
@@ -23,7 +26,7 @@ export default {
         this.loaded = false
         try {
         const data = await axios.post(`${process.env.VUE_APP_BASE}/get_pie_totals`, {
-            userid: process.env.VUE_APP_USERID, // Replace with state var
+            userid: this.userid,
             api_key: process.env.VUE_APP_API_KEY,
         })
         this.chartdata = data.data.totals_datasets

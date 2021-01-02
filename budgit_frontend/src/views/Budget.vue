@@ -9,12 +9,13 @@
 </template>
 
 <script>
-// @ is an alias to /src
 import Nav from "../components/Nav"
 import BudgetItems from "../components/BudgetItems"
 import AddItem from "../components/AddItem"
 import ExpenseTotal from "../components/ExpenseTotal"
 import axios from "axios"
+import { mapGetters } from "vuex"
+
 export default {
   name: 'Budget',
   components: {
@@ -30,6 +31,7 @@ export default {
       total: 0
     }
   },
+  computed: mapGetters(['userid']),
   methods: {
     additem(newitem){
       // Make api call to save item to db
@@ -40,7 +42,7 @@ export default {
       // Make api call to delete item from db
       this.items = this.items.filter(item => item.id !== id); //Remove deleted item from list
       axios.post(`${process.env.VUE_APP_BASE}/delete_item`, {
-        "userid": process.env.VUE_APP_USERID, // Replace with state var
+        "userid": this.userid, 
         "api_key": process.env.VUE_APP_API_KEY,
         "deleted_id": id
       })
@@ -60,23 +62,19 @@ export default {
     this.getTotal();
   },
   created(){
-    // fetch(`${process.env.VUE_APP_BASE}/get_items`, {
-    //   method: 'POST',
-    //   content: 'application/json',
-    //   body: JSON.stringify({
-    //     "userid": 1, 
-    //     "api_key": process.env.VUE_APP_API_KEY
-    //     }),
-    //   }
-    // )
+    if (! this.userid){
+      this.$router.push("/login")
+    }
     axios.post(`${process.env.VUE_APP_BASE}/get_items`, {
-      "userid": process.env.VUE_APP_USERID, // Replace with state var 
+      "userid": this.userid, // Replace with state var 
       "api_key": process.env.VUE_APP_API_KEY
     })
     .then((res) => {
       this.items = res.data.items;
       })
     .catch(err => console.error(err))
+
+    this.getTotal()
   }
 }
 </script>

@@ -13,6 +13,8 @@
 import Nav from "../components/Nav";
 import PieTotals from "../components/PieTotals"
 import MonthlyExpenses from "../components/MonthlyExpenses"
+import { mapGetters } from 'vuex'
+
 export default {
   name: "Stats",
   components: {
@@ -20,6 +22,14 @@ export default {
     PieTotals,
     MonthlyExpenses,
   },
+
+  computed: mapGetters(['userid']),
+
+  created() {
+    if (! this.userid){
+      this.$router.push("/login")
+    }
+  }
 }
 </script>
 

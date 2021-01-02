@@ -6,14 +6,19 @@
 </template>
 
 <script>
-// @ is an alias to /src
-//import HelloWorld from '@/components/HelloWorld.vue'
 import Nav from "../components/Nav"
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
   components: {
     Nav,
   },
+  computed: mapGetters(['userid']), 
+  created() {
+    if (! this.userid){
+      this.$router.push("/login")
+    }
+  }
 }
 </script>
