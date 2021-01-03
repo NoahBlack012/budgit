@@ -134,7 +134,11 @@ def delete_item():
     if not check_api_key(sent_key):
         return make_response(jsonify({"status_code": 401}), 401)
 
-    Item.query.filter_by(id=deleted_id).delete() #delete the item with the id provided from the db
+    if Item.query.filter_by(id=deleted_id).userid == userid:
+        Item.query.filter_by(id=deleted_id).delete() #delete the item with the id provided from the db
+    else:
+        return make_response(jsonify({"status_code": 401}), 401)
+        
     db.session.commit()
     return make_response(jsonify({"status_code": 200}), 200)
 
@@ -231,6 +235,5 @@ def get_monthly_bar_totals():
 
     return make_response(jsonify({"status_code": 200, "bar_data": bar_data}), 200)
 
-            
 if __name__ == '__name__':
     app.run(debug=True)
