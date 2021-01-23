@@ -169,7 +169,7 @@ def get_categories():
 def get_pie_totals():
     userid = request.json.get("userid", None)
     sent_key = request.json.get("api_key", None)
-    if not check_api_key(sent_key):
+    if not check_api_key(sent_key) or not userid:
         return make_response(jsonify({"status_code": 401}), 401)
     user_categories = User.query.filter_by(id=userid).first().categories
     user_items = Item.query.filter_by(userid=userid).all()
