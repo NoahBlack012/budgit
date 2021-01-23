@@ -4,13 +4,23 @@
             <router-link to="/">Home</router-link>
             <router-link to="/budget">Budget</router-link>
             <router-link to="/stats">Statistics</router-link>
+            <router-link to="/login" @click="logout">Logout</router-link>
         </div>
     </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
     name: "Nav",
+    methods: {
+        ...mapActions(['loginUser']),
+        logout(){
+            this.loginUser(0)
+            this.$router.push("/login")
+        }
+    }
 }
 </script>
 
@@ -45,6 +55,7 @@ export default {
 
     a.router-link-exact-active{
         background-color: #a82710;
+        border: 1px solid #a82710;
     }
 
 </style>

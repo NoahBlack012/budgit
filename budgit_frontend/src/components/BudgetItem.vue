@@ -2,7 +2,7 @@
     <div class="budgetitem">
         <p>
             {{item.title}}
-            ${{item.value}}
+            <span style="color:green">${{item.value}} </span>
             <span id = "cat">{{item.category}}</span>
             <button @click="$emit('del-item', item.id)" class = "delete">X</button>
         </p>

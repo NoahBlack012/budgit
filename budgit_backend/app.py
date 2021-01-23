@@ -134,7 +134,7 @@ def delete_item():
     if not check_api_key(sent_key):
         return make_response(jsonify({"status_code": 401}), 401)
 
-    if Item.query.filter_by(id=deleted_id).userid == userid:
+    if Item.query.filter_by(id=deleted_id).first().userid == userid:
         Item.query.filter_by(id=deleted_id).delete() #delete the item with the id provided from the db
     else:
         return make_response(jsonify({"status_code": 401}), 401)

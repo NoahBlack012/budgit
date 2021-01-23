@@ -13,11 +13,9 @@
         </div>
         <div class="login">
             <div class="logincontent">
-                <h1 id="signuptitle">Sign In</h1>
+                <!-- <h1 id="signuptitle">Sign In</h1> -->
                 <p>Signup now and start to<br>keep track of your<br>finances like never before</p>
-                <div id = "button">
-                    <router-link to="/login" id="link">Return to Login</router-link>
-                </div>
+                <router-link to="/login" id="link">Return to Login</router-link>
             </div>
         </div>
     </div>

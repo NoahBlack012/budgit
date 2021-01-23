@@ -3,8 +3,13 @@
     <Nav />
     <h1>Statistics</h1>
     <div class="graphs">
-      <PieTotals id="expense_category" class="chart" />
-      <MonthlyExpenses id = "monthly-expenses" class="chart" />
+      <div class="pietotals">
+        <PieTotals id="expense_category" class="chart" />
+      </div>
+
+      <div class="monthlyexpenses">
+        <MonthlyExpenses id = "monthly-expenses" class="chart" />
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +34,7 @@ export default {
     if (! this.userid){
       this.$router.push("/login")
     }
-  }
+  }, 
 }
 </script>
 
@@ -40,21 +45,24 @@ export default {
   }
   .graphs {
     min-width: 100%;
+    min-height: 100%;
     display: grid;
-    grid-template-columns: 33% 33% 33%;
+    grid-template-columns: 50% 50%;
   }
 
   .chart{
-    background-color: #fff;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+    0 10px 10px rgba(0,0,0,0.22);
+    margin: 10px;
+    color: rgb(45, 34, 189);
   }
 
-  #expense_category {
+
+  .pietotals{
     grid-column: 1;
   }
-  #expense_category2 {
+
+  .monthlyexpenses{
     grid-column: 2;
-  }
-  #expense_category3 {
-    grid-column: 3;
   }
 </style>
