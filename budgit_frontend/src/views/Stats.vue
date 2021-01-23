@@ -3,8 +3,8 @@
     <Nav />
     <h1>Statistics</h1>
     <div class="graphs">
-      <PieTotals id="expense_category" />
-      <MonthlyExpenses id = "monthly-expenses" />
+      <PieTotals id="expense_category" class="chart" />
+      <MonthlyExpenses id = "monthly-expenses" class="chart" />
     </div>
   </div>
 </template>
@@ -34,18 +34,27 @@ export default {
 </script>
 
 <style scoped>
-.graphs {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-}
+  .stats{
+    min-width: 100%;
+    min-height: 100%;
+  }
+  .graphs {
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+  }
 
-#expense_category {
-  grid-column: 1;
-}
-#expense_category2 {
-  grid-column: 2;
-}
-#expense_category3 {
-  grid-column: 3;
-}
+  .chart{
+    background-color: #fff;
+  }
+
+  #expense_category {
+    grid-column: 1;
+  }
+  #expense_category2 {
+    grid-column: 2;
+  }
+  #expense_category3 {
+    grid-column: 3;
+  }
 </style>

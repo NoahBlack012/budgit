@@ -2,9 +2,17 @@
   <div class="budget">
       <Nav />
       <h1>Budget</h1>
-      <AddItem v-on:add-item="additem" />
-      <BudgetItems v-bind:items="items" v-on:del-item="deleteitem" />
-      <ExpenseTotal v-bind:total="total" />
+      <div class="container">
+        <div class="new-item">
+          <AddItem v-on:add-item="additem" id="form" :categories="categories" />
+          <AddCategory id="addcategory" v-on:add-category="add_category" />
+        </div>
+        
+        <div class="items">
+          <BudgetItems v-bind:items="items" v-on:del-item="deleteitem" />
+          <h3>Total: ${{total}}</h3>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -12,7 +20,7 @@
 import Nav from "../components/Nav"
 import BudgetItems from "../components/BudgetItems"
 import AddItem from "../components/AddItem"
-import ExpenseTotal from "../components/ExpenseTotal"
+import AddCategory from "../components/AddCategory"
 import axios from "axios"
 import { mapGetters } from "vuex"
 
@@ -22,25 +30,27 @@ export default {
     Nav,
     BudgetItems,
     AddItem,
-    ExpenseTotal
+    AddCategory, 
   },
   data(){
     return{
-      // Make api call and get user's budget
       items: [],
-      total: 0
+      total: null,
+      categories: [], 
     }
   },
   computed: mapGetters(['userid']),
   methods: {
     additem(newitem){
-      // Make api call to save item to db
-      this.items = [...this.items, newitem];
+      // Api call is made from AddItem component
+      this.all_items = [...this.all_items, newitem];
+      this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
       this.getTotal();
     },
     deleteitem(id){
       // Make api call to delete item from db
-      this.items = this.items.filter(item => item.id !== id); //Remove deleted item from list
+      this.all_items = this.all_items.filter(item => item.id !== id); //Remove deleted item from list
+      this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length)
       axios.post(`${process.env.VUE_APP_BASE}/delete_item`, {
         "userid": this.userid, 
         "api_key": process.env.VUE_APP_API_KEY,
@@ -52,32 +62,78 @@ export default {
     }, 
     getTotal(){
       this.total = 0
-      for (let item of this.items){
-        let value = parseInt(item.value, 10);
-        this.total = this.total + value;
+      for (let item of this.all_items){
+        let value = item.value;
+        this.total += parseInt(value);
       }
+    }, 
+    add_category(new_categories){
+      this.categories = new_categories;
     }
   },
-  beforeMount(){
+  mounted(){
     this.getTotal();
   },
-  created(){
+  async created(){
     if (! this.userid){
       this.$router.push("/login")
     }
-    axios.post(`${process.env.VUE_APP_BASE}/get_items`, {
-      "userid": this.userid, // Replace with state var 
+    const res = await axios.post(`${process.env.VUE_APP_BASE}/get_items`, {
+      "userid": this.userid,
       "api_key": process.env.VUE_APP_API_KEY
     })
-    .then((res) => {
-      this.items = res.data.items;
-      })
-    .catch(err => console.error(err))
+    this.all_items = res.data.items; 
+    this.items = this.all_items.slice(this.all_items.length - 5, this.all_items.length);
+    this.getTotal();
 
-    this.getTotal()
+    const category_res = await axios.post(`${process.env.VUE_APP_BASE}/get_categories`, {
+        "userid": this.userid,
+        "api_key": process.env.VUE_APP_API_KEY
+    })
+
+    for (let i of category_res.data.categories){
+      this.categories.push(i)
+    }
   }
 }
 </script>
 
+
 <style scoped>
+  .new-item #form{
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+
+  .budget{
+    min-width: 100%;
+    min-height: 100%;
+  }
+
+  .container{
+    min-width: 100%;
+    min-height: 100%;
+    display: grid;
+    grid-template-columns: 50% 50%;
+  }
+
+  .new-item{
+    min-height: 100%;
+    grid-column: 1;
+    background-color: #fff;
+    display: grid;
+    padding-top: 5%;
+    padding-bottom: 5%;
+  }
+
+  .items{
+    min-height: 100%;
+    grid-column: 2;
+    background-color: #FF4B2B;
+    padding-top: 5%;
+    padding-bottom: 5%;
+  }
+
 </style>
+

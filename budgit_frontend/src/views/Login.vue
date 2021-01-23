@@ -1,70 +1,96 @@
 <template>
   <div class="page">
-    <h1 id = "title">Login</h1>
     <div class = "form">
       <form @submit.prevent="login">
+        <h1 id="signintitle">Sign In</h1>
         <input type="text" id="username" v-model="username" placeholder="Username" autocomplete="off"><br>
         <input type="password" id="password" v-model="password" placeholder="Password"><br>
-        <input type="submit" value="Log In" id = "button">
+        <input type="submit" value="SIGNIN" id = "button">
       </form>
-      <div class="signup" id = "button">
-        <router-link to="/signup" id="link">Signup</router-link>
+    </div>
+    <div class="signup">
+      <div class="signupcontent">
+        <h1 id="signuptitle">Sign Up</h1>
+        <button id = "button">
+          <router-link to="/signup" id="link">Signup</router-link>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <style>
-  #title{
-    font-size: 30pt;
-    color: white;
+  #signintitle{
+    color: black;
+  }
+
+  #signuptitle{
+    color: #fff;
   }
 
   .page{
+    display: grid;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+    0 10px 10px rgba(0,0,0,0.22);
     width: 50%;
-    min-height: 40vh;
-    background: #2F1D85;
-    grid-template-rows: 40% 60%;
-    grid-template-columns: 100%;
+    min-height: 50%;
+    grid-template-columns: 50% 50%;
   }
 
   .form{
-    overflow: auto;
-    display: grid;
-    place-items: center;
-    grid-row: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    grid-column: 1;
+    min-height: 100%;
   }
 
-  input{
-    background-color: #91B1EB;
+  input, #input{
+    background-color: #eee;
     border: none;
-    margin: 1px;
-    padding: 10px;
+    padding: 5%;
+    margin: 1%;
     text-align: center;
-  }
-
-  input:focus{
-    background-color: #6F5FB8;
   }
 
   input, input::placeholder{
     font-size: 12pt;
-    color: white;
+    color: black;
   }
 
   #button{
-    background-color: #91B1EB;
-    padding: 3px;
-    margin: 5px;
+    border-radius: 20px;
+    border: 1px solid #FF4B2B;
+    background-color: #FF4B2B;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
   }
 
   #button:hover{
-    background-color: #6F5FB8
+    cursor: pointer;
   }
 
-  .signup{
-    width: fit-content;
+  .signup, .login{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+    background-color: #FF416C;
+    grid-column: 2;
   }
+
+  h1, p{
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
   #link{
     text-decoration: none;
     color: white

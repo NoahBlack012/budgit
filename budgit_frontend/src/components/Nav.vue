@@ -1,8 +1,10 @@
 <template>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/budget">Budget</router-link> |
-      <router-link to="/stats">Statistics</router-link>
+        <div class="navbar">
+            <router-link to="/">Home</router-link>
+            <router-link to="/budget">Budget</router-link>
+            <router-link to="/stats">Statistics</router-link>
+        </div>
     </div>
 </template>
 
@@ -12,19 +14,37 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
     #nav {
-        width: 100%;
-        background-color: #24292E;
-        padding: 1em;
+        min-width: 100%;
+        top: 0%;
+        left: 0%;
+        height: fit-content;
     }
 
-    #nav a {
+    .navbar{
+        height: fit-content;
+        min-width: 100%;
+        background-color: #fff;
+        padding: 20px;
+    }
+
+    a{
+        border-radius: 20px;
+        border: 1px solid #FF4B2B;
+        background-color: #FF4B2B;
+        color: #FFFFFF;
+        font-size: 12px;
         font-weight: bold;
-        color: #BABCB7;
+        padding: 12px 45px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        text-decoration: none;
+        margin: 7%;
     }
 
-    #nav a.router-link-exact-active {
-        color: #42b983;
+    a.router-link-exact-active{
+        background-color: #a82710;
     }
+
 </style>

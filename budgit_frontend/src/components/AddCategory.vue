@@ -1,11 +1,8 @@
 <template>
     <div id = "add_category">
-        <form @submit.prevent="add_category" autocomplete="off">
-            <input type="text" v-model="new_category">
-            <input type="submit" value="+" id="btn">
-            <div v-if="formsubmited">
-                <div class="error" v-if="!$v.new_category.required">Enter a Category</div>
-            </div>
+        <form @submit.prevent="add_cat" autocomplete="off">
+            <input type="text" v-model="new_category" placeholder="Add Another Category"><br>
+            <input type="submit" value="+" id="button">
         </form>
     </div>
 </template>
@@ -30,7 +27,7 @@ export default {
     computed: mapGetters(['userid']),
 
     methods: {
-        add_category(){
+        add_cat(){
             this.$v.$touch()
             this.formsubmited = true
             if (!this.$v.$invalid){
@@ -44,24 +41,26 @@ export default {
                     this.$emit('add-category', new_categories)
                 })
                 .catch(err => console.error(err))
-                this.new_category = ""
             }
+            this.new_category = ""
         }
     }
 }
 </script>
 
 <style scoped>
-    #btn{
-        border-radius: 50%;
-        background: aqua;
-        color: black;
-        border: 1px solid aqua;
+    input{
+        width: 25%;
     }
-    
-    #btn:hover {
-        cursor: pointer;
+
+    input[type="text"]{
+        padding: 5px 5px; line-height: 10px;
     }
+
+    #button{
+        width: 15%;
+    }
+
     .error{
         color: red;
     }

@@ -1,18 +1,24 @@
 <template>
     <div class="page">
-        <h1 id = "title">Signup</h1>
         <div class="form">
             <form @submit.prevent="signup">
+                <h1 id="signintitle">Sign Up</h1>
                 <input type="text" name="username" id="username" v-model="username" placeholder="Username" autocomplete="off"><br>
                 <input type="password" name="password" id="password" v-model="password" placeholder="Password"><br>
                 <input type="password" name="confirm_password" id="confirm_password" v-model="confirm_password" placeholder="Confirm Password"><br>
-                <input type="submit" value="Create User" id = "button">
+                <input type="submit" value="SIGNUP" id = "button">
             </form>
-            <div id = "button">
-                <router-link to="/login" id="link">Go back To Login</router-link>
-            </div>
             <div v-if="non_password_match">The passwords entered do not match</div>
             <div v-if="username_taken">That username is already taken</div>
+        </div>
+        <div class="login">
+            <div class="logincontent">
+                <h1 id="signuptitle">Sign In</h1>
+                <p>Signup now and start to<br>keep track of your<br>finances like never before</p>
+                <div id = "button">
+                    <router-link to="/login" id="link">Return to Login</router-link>
+                </div>
+            </div>
         </div>
     </div>
 </template>
