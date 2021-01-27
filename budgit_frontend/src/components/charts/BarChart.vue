@@ -22,7 +22,10 @@ export default {
             scales: {
                 yAxes: [{
                     ticks: {
-                        fontColor: 'white'
+                        fontColor: 'white', 
+                        callback: function(value) {
+                            return '$' + value.toFixed(2);
+                        }, 
                     }
                 }],
                 xAxes: [{

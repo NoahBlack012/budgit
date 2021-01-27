@@ -15,7 +15,7 @@ export default {
             fontColor: 'white',
             legend: {
                 labels: {
-                    fontColor: 'white'
+                    fontColor: 'white', 
                 }
             }
         })

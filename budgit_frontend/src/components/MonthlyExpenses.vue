@@ -23,6 +23,9 @@ export default {
     }, 
     computed: mapGetters(['userid']),
     async mounted() {
+        if (!this.userid){
+            this.$router.push("/login")
+        }
         this.loaded = false
         try{
             const res = await axios.post(`${process.env.VUE_APP_BASE}/get_monthly_bar_totals`, {

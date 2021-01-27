@@ -23,6 +23,9 @@ export default {
         };
     },
     async mounted () {
+        if (!this.userid){
+            this.$router.push("/login")
+        }
         this.loaded = false
         try {
         const data = await axios.post(`${process.env.VUE_APP_BASE}/get_pie_totals`, {
